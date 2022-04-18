@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Support\Facades\Route;
+
 
 class PostController extends Controller
 {
     //
     public function index()
     {
-        $posts = [
-            ['id'=>1, 'title'=>'laravel','posted_by'=>'Ahmed','created_at'=>'2022-4-20'],
-            ['id'=>2, 'title'=>'php','posted_by'=>'Mohamed','created_at'=>'2022-3-15'],
-            ['id'=>3, 'title'=>'javaScript','posted_by'=>'Ali','created_at'=>'2022-8-25']
-        ];
+        // $posts = Post::all();
+        $posts = Post::paginate(15);
+        $posts->withPath('/posts');
         return view('posts.index',[
             'posts'=>$posts
         ]);
@@ -21,27 +23,54 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('posts.create');
+        return view('posts.create',[
+            'users'=>User::all()
+        ]);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        return 'we are in store';
+        // Post::create([
+        //     'title'=>'python',
+        //     'description'=>'python is good'
+        // ]);
+        $requestData = $request->all();
+        Post::create($requestData);
+        return redirect("/posts");  //it doesn't work with naming and doesn't work with route
+
     }
 
     public function show($postId)
     {
-        return "we are in $postId";
+        $post = Post::find($postId);
+        return view('posts.show',[
+            'post'=>$post,
+        ]);
     }
 
     public function edit($postId)
     {
-        return view('posts.edit');
+        return view('posts.edit',[
+            'postId'=>$postId,
+            'users'=>User::all()
+        ]);
     }
 
-    public function update()
+    public function update($postId)
     {
-          return "<script>location.href='/posts'</script>";
+          Post::where('id',$postId)
+          ->update([
+            'title'=>request()->title,
+            'description'=>request()->description,
+            'user_id'=>request()->user_id
+          ]);
+          return redirect("/posts");  //it doesn't work with naming and doesn't work with route
+    }
+
+    public function destroy($postId)
+    {
+        Post::where('id',$postId)->delete();
+        return redirect("/posts");  //it doesn't work with naming and doesn't work with route
     }
 
 
