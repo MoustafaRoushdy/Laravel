@@ -31,8 +31,32 @@ show
     <p class="card-text">{{ $post->user->email }}</p>
     <h5 class="cart-title">Created At:-</h5>
     <p class="card-text">{{ $post->created_at->toDayDateTimeString() }}</p>
-
-
+</div>
+<div>
+    <form  method="POST" action="{{route('comments.store')}}">
+    @csrf
+        <h3>Add a comment</h3>
+        <br>
+        <textarea name="body" id="" cols="100" rows="1"></textarea>
+        <button type="submit">Comment</button>
+        <input type="hidden" name="post_id" value="{{ $post->id }}" >
+        <input type="hidden" name="parent" value="App\Models\Post" >
+    </form>
+    {{-- dd($post->comments) --}}
+    @if(count($post->comments) > 0)
+    @foreach($post->comments as $comment)
+        <div class="card">
+            <div class="card-header">
+                {{$comment->user->name}}: {{$comment->body}}: {{$comment->created_at->toDateString() }}
+            </div>
+        <div class="card-body">
+            <div>
+                <!-- <span style="font-size: 1.2rem; font-weight: bold">Comment: </span> -->
+                
+            </div>
+        </div>
+    @endforeach
+    @endif
 </div>
 
 

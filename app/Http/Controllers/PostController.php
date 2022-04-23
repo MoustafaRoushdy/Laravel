@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Requests\StorePostRequest;
 
 
 class PostController extends Controller
@@ -23,18 +24,20 @@ class PostController extends Controller
 
     public function create()
     {
+      
         return view('posts.create',[
             'users'=>User::all()
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)//Request $request)
     {
-        // Post::create([
-        //     'title'=>'python',
-        //     'description'=>'python is good'
+        // request()->validate([
+        //     'title'=>['required','min:3'],
+        //     'description'=>['required','min:5']
         // ]);
-        $requestData = $request->all();
+        
+        $requestData = request()->all();
         Post::create($requestData);
         return redirect("/posts");  //it doesn't work with naming and doesn't work with route
 
@@ -51,13 +54,15 @@ class PostController extends Controller
     public function edit($postId)
     {
         return view('posts.edit',[
-            'postId'=>$postId,
+            'post'=>Post::find($postId),
             'users'=>User::all()
         ]);
     }
 
-    public function update($postId)
+    public function update($postId,StorePostRequest $request)
     {
+        
+        // $request['title'] =$request.['title'].$postId;
           Post::where('id',$postId)
           ->update([
             'title'=>request()->title,
