@@ -37,22 +37,14 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)//Request $request)
     {
-        // request()->validate([
-        //     'title'=>['required','min:3'],
-        //     'description'=>['required','min:5']
-        // ]);
-        
-        // $requestData = request()->all();
-        // Post::create($requestData);
-        // $z555555
+        $validated = $request->validated();
         Post::create([
-          'title'=>request()->title,
-          'description'=>request()->description,
-          'user_id'=>request()->user_id,
-        //   'slug'=>SlugService::createSlug(Post::class, 'slug', request()->title)
+
+          'title'=>$validated['title'],
+          'description'=>$validated['description'],
+          'user_id'=>$validated['user_id'],
 
         ]);
-        dd($request);
         return redirect("/posts");  //it doesn't work with naming and doesn't work with route
 
 
