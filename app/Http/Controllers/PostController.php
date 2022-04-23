@@ -7,6 +7,9 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Requests\StorePostRequest;
+use App\Jobs\PruneOldPostsJob;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
+
 
 
 class PostController extends Controller
@@ -14,6 +17,8 @@ class PostController extends Controller
     //
     public function index()
     {
+    // PruneOldPostsJob::dispatch();
+
         // $posts = Post::all();
         $posts = Post::paginate(15);
         $posts->withPath('/posts');
@@ -37,9 +42,19 @@ class PostController extends Controller
         //     'description'=>['required','min:5']
         // ]);
         
-        $requestData = request()->all();
-        Post::create($requestData);
+        // $requestData = request()->all();
+        // Post::create($requestData);
+        // $z555555
+        Post::create([
+          'title'=>request()->title,
+          'description'=>request()->description,
+          'user_id'=>request()->user_id,
+        //   'slug'=>SlugService::createSlug(Post::class, 'slug', request()->title)
+
+        ]);
+        dd($request);
         return redirect("/posts");  //it doesn't work with naming and doesn't work with route
+
 
     }
 
@@ -62,7 +77,6 @@ class PostController extends Controller
     public function update($postId,StorePostRequest $request)
     {
         
-        // $request['title'] =$request.['title'].$postId;
           Post::where('id',$postId)
           ->update([
             'title'=>request()->title,
