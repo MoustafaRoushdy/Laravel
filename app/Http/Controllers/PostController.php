@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Requests\StorePostRequest;
 use App\Jobs\PruneOldPostsJob;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
-
-
+use Facade\FlareClient\Stacktrace\File;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -37,14 +37,24 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)//Request $request)
     {
-        $validated = $request->validated();
-        Post::create([
+        // $path = $request->file('avatar')->store('images');
+        // $request->merge(['avatar' => $path]);
+        // // dd($request->all());
+        // validated = $request->validated();
+        $fileInRequest = $request->file('avatar'); 
+        $request->merge(['image' => $fileInRequest]);
+        $post =Post::create($request->only('title', 'description', 'user_id','image')); 
+        
+        dd($post);
 
-          'title'=>$validated['title'],
-          'description'=>$validated['description'],
-          'user_id'=>$validated['user_id'],
+        // Post::create([
 
-        ]);
+        //   'title'=>$validated['title'],
+        //   'description'=>$validated['description'],
+        //   'user_id'=>$validated['user_id'],
+        //   'image'=>$validated['avatar']
+
+        // ]);
         return redirect("/posts");  //it doesn't work with naming and doesn't work with route
 
 

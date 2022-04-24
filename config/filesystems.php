@@ -41,6 +41,12 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'posts-Avatar' => [ 
+            'driver' => 'local',
+            'root' => base_path().'/public',
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public', 'throw' => false, 
+            ], 
 
         's3' => [
             'driver' => 's3',

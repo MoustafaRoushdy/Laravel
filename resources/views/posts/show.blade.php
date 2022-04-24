@@ -42,21 +42,23 @@ show
         <input type="hidden" name="post_id" value="{{ $post->id }}" >
         <input type="hidden" name="parent" value="App\Models\Post" >
     </form>
-    {{-- dd($post->comments) --}}
+    <div class="card-body">
+          
+            <div>
+            <img src="{{asset($post->image) }}" class="rounded float-end card-img-top" alt="...">
+                
+            </div>
+        </div>
     @if(count($post->comments) > 0)
     @foreach($post->comments as $comment)
         <div class="card">
             <div class="card-header">
                 {{$comment->user->name}}: {{$comment->body}}: {{$comment->created_at->toDateString() }}
             </div>
-        <div class="card-body">
-            <div>
-                <!-- <span style="font-size: 1.2rem; font-weight: bold">Comment: </span> -->
-                
-            </div>
-        </div>
+       
     @endforeach
     @endif
+
 </div>
 
 

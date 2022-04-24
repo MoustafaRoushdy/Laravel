@@ -14,6 +14,7 @@ class Post extends Model
         'title',
         'description',
         'user_id',
+        'image'
     ];
 
     // public function myUserRelation()
@@ -37,4 +38,12 @@ class Post extends Model
             ]
         ];
     }
+
+    protected function setImageAttribute($value) {
+         if ($value) 
+         { 
+             $path = $value->store('images/uploads', ['disk' => 'posts-Avatar']); 
+             return $this->attributes['image'] = $path;
+         } 
+    } 
 }

@@ -28,7 +28,8 @@ class StorePostRequest extends FormRequest
         return [
             'title'=>['required','min:3','unique:App\Models\Post,title,'.$this->post],
             'description'=>['required','min:10','unique:App\Models\Post,description'],
-            'user_id'=>'exists:App\Models\User,id'
+            'user_id'=>'exists:App\Models\User,id',
+            'avatar'=>'mimes:jpg,png'
         ];
     }
 }
