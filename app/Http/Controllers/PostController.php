@@ -45,7 +45,7 @@ class PostController extends Controller
         $request->merge(['image' => $fileInRequest]);
         $post =Post::create($request->only('title', 'description', 'user_id','image')); 
         
-        dd($post);
+        // dd($post);
 
         // Post::create([
 
